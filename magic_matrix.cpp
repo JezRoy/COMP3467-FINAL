@@ -204,8 +204,6 @@ int main(int argc, char *argv[])
 
     if (argc != 3) {
         printf("Usage: %s <pattern_filename> <modifier_filename>\n", argv[0]);
-        end = omp_get_wtime();
-        printf("Function 'main' took %f seconds to complete\n", end - start);
         return 1;
     }
 
@@ -214,15 +212,11 @@ int main(int argc, char *argv[])
 
     if (pattern_file == NULL) {
         printf("Error opening the pattern_file.\n");
-        end = omp_get_wtime();
-        printf("Function 'main' took %f seconds to complete\n", end - start);
         return 1;
     }
 
     if (modifier_file == NULL) {
         printf("Error opening the modifier_file.\n");
-        end = omp_get_wtime();
-        printf("Function 'main' took %f seconds to complete\n", end - start);
         return 1;
     }
 
@@ -231,16 +225,12 @@ int main(int argc, char *argv[])
         printf("Error reading the size of the matrix.\n");
         fclose(pattern_file);
         fclose(modifier_file);
-        end = omp_get_wtime();
-        printf("Function 'main' took %f seconds to complete\n", end - start);
         return 1;
     }
 
     if (fscanf(modifier_file, "%d", &N) != 1) {
         printf("Error reading the size of the matrix.\n");
         fclose(modifier_file);
-        end = omp_get_wtime();
-        printf("Function 'main' took %f seconds to complete\n", end - start);
         return 1;
     }
 
@@ -255,6 +245,7 @@ int main(int argc, char *argv[])
     }
 
     // read-in matrix data
+    start = omp_get_wtime();
     for (int i = 0; i < N; i++) {
 	    pattern[i] = new int[N];
 	    modifier[i] = new int[N];
@@ -301,6 +292,8 @@ int main(int argc, char *argv[])
     else                printf("Generated matrix is not a magic square.\n");
 
 
+    end = omp_get_wtime();
+    printf("Function 'main' took %f seconds to complete\n", end - start);
     // free dynamically allocated memory
     for (int i = 0; i < M; i++) {
         delete[] magicSquare[i];
@@ -313,7 +306,4 @@ int main(int argc, char *argv[])
     }
     delete[] pattern;
     delete[] modifier;
-
-    end = omp_get_wtime();
-    printf("Function 'main' took %f seconds to complete\n", end - start);
 }
