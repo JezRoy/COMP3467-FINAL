@@ -19,6 +19,10 @@
 //      Multiply all elements in the "pattern" block[i][j] with the element at modifier[i][j]. 
 //
 
+// NOTE TO SELF: vvvvvvv
+// COMPILE THIS CODE: nvc++ -fopenmp -mp=gpu magic_matrix.cpp -o xmm
+// RUN THIS CODE: ./xmm data_sets/pattern3x3.dat data_sets/modifier3x3.dat
+
 double omp_get_wtime(void);
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
