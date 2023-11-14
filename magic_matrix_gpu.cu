@@ -220,7 +220,7 @@ bool isMagicSquare(int** matrix, int N)
     return true;
 }
 
-int main(int argc, char *argv[])3
+int main(int argc, char *argv[])
 {
     double start;
     double end;
