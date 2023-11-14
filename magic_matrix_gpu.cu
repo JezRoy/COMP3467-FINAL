@@ -57,34 +57,24 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 // computes sum of elements in a row
 int sumRow( int** matrix, int row, int N)
 {
-    double start;
-    double end;
-    start = omp_get_wtime();
     int sum = 0;
     #pragma omp parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
     }
-    end = omp_get_wtime();
-    printf("Function 'sumRow' took %f seconds to complete\n", end - start);
     return sum;
 }
 
 // computes sum of elements in a column
 int sumColumn( int** matrix, int col, int N)
 {
-    double start;
-    double end;
-    start = omp_get_wtime();
     int sum = 0;
     #pragma omp parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
     }
-    end = omp_get_wtime();
-    printf("Function 'sumColumn' took %f seconds to complete\n", end - start);
     return sum;
 }
 
@@ -107,15 +97,17 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
-bool isPairwiseDistinct( int** matrix, int N) {
+bool isPairwiseDistinctOLD( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
+
             int currentElement = matrix[i][j];
             for (int row = 0; row < N; row++) {
                 for (int col = 0; col < N; col++) {
+
                     if (row != i || col != j) {
                         int otherElement = matrix[row][col];
                         if (currentElement == otherElement) {
@@ -131,6 +123,35 @@ bool isPairwiseDistinct( int** matrix, int N) {
     end = omp_get_wtime();
     printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
     return false;
+}
+
+bool isPairwiseDistinct( int** matrix, int N) {
+    double start;
+    double end;
+    start = omp_get_wtime();
+    bool pairwDisT = true;
+    #pragma omp parallel for collapse(2) shared(pairwDisT)
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            int currentElement = matrix[i][j];
+            #pragma omp parallel for collapse(2)
+            for (int row = 0; row < N; row++) {
+                for (int col = 0; col < N; col++) {
+                    if (row != i || col != j) {
+                        int otherElement = matrix[row][col];
+                        if (currentElement == otherElement) {
+                            end = omp_get_wtime();
+                            printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+                            pairwDisT = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    end = omp_get_wtime();
+    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+    return pairwDisT;
 }
 
 // checks if matrix is a magic square
@@ -200,11 +221,12 @@ bool isMagicSquare(int** matrix, int N)
     return true;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[])3
 {
     double start;
     double end;
     start = omp_get_wtime();
+    #pragma omp parallel()
 
     if (argc != 3) {
         printf("Usage: %s <pattern_filename> <modifier_filename>\n", argv[0]);
