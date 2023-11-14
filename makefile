@@ -11,7 +11,7 @@ all:
 
 $(TARGET): $(SRC)
 	$(CC) -o xmm $(SRC) $(LDFLAGS)
-	nvcc -mp=gpu $(GPU_TARGET) -o $(TARGET) $(LDFLAGS)
+	nvcc $(GPU_TARGET) -o $(TARGET) $(LDFLAGS)
 
 $(GPU_TARGET): $(SRC)
 	mmgpu -o $(GPU_TARGET) $(SRC) $(LDFLAGS)
