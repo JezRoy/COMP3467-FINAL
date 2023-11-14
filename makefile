@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -O3 -std=c++11
-LDFLAGS = -Xcompiler -fopenmp
+LDFLAGS = -fopenmp
 
 SRC = magic_matrix.cpp
 TARGET = xmmGPU
@@ -12,7 +12,7 @@ $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRC) $(LDFLAGS)
 
 $(GPU_TARGET): $(SRC)
-	nvcc -o $(GPU_TARGET) $(SRC)
+	nvcc -o $(GPU_TARGET) $(SRC) $(LDFLAGS)
 
 clean:
 	rm -f $(TARGET) $(GPU_TARGET)
