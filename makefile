@@ -16,4 +16,4 @@ $(GPU_TARGET): $(SRC)
 
 clean:
 	rm -f $(TARGET) $(GPU_TARGET)
-    rm -f xmm
+	rm -f xmm
