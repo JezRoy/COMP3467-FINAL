@@ -39,7 +39,6 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 	    }
     }
 
-    #pragma omp target teams distribute parallel for collapse(2) map(tofrom: magicSquare[0:M][0:M], modifier[0:N][0:N], pattern[0:N][0:N])
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
