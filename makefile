@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -O3 -std=c++11
-LDFLAGS = -fopenmp
+LDFLAGS = -Xcompiler -fopenmp
 
 SRC = magic_matrix.cpp
 TARGET = xmmGPU
