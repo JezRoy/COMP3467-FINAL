@@ -24,8 +24,13 @@
 // RUN THIS CODE: ./xmm data_sets/pattern3x3.dat data_sets/modifier3x3.dat
 // OR THIS CODE: ./xmmGPU data_sets/pattern3x3.dat data_sets/modifier3x3.dat
 
+double omp_get_wtime(void);
+
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {
+    double start;
+    double end;
+    start = omp_get_wtime();
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -33,8 +38,8 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 		    modifier[i][j] *= M;
 	    }
     }
+
     #pragma omp target teams distribute parallel for collapse(2) map(tofrom: magicSquare[0:M][0:M], modifier[0:N][0:N], pattern[0:N][0:N])
-    // Parallelizing the nested-loop used to generate magic squares
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
@@ -45,43 +50,67 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 	        magicSquare[i][j] += modifier[i/N][j/N];
         }
     }
+    end = omp_get_wtime();
+    printf("Function 'generateMagicSquare' took %f seconds to complete\n", end - start);
 }
 
 // computes sum of elements in a row
 int sumRow( int** matrix, int row, int N)
 {
+    double start;
+    double end;
+    start = omp_get_wtime();
     int sum = 0;
+    #pragma omp parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
     }
+    end = omp_get_wtime();
+    printf("Function 'sumRow' took %f seconds to complete\n", end - start);
     return sum;
 }
 
 // computes sum of elements in a column
 int sumColumn( int** matrix, int col, int N)
 {
+    double start;
+    double end;
+    start = omp_get_wtime();
     int sum = 0;
+    #pragma omp parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
     }
+    end = omp_get_wtime();
+    printf("Function 'sumColumn' took %f seconds to complete\n", end - start);
     return sum;
 }
 
 // checks if all elements in an array are equal
 bool allEqual( int arr[], int N)
 {
-    for (int i = 0; i < N; i++) {
+    double start;
+    double end;
+    start = omp_get_wtime();
+    for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
-	    {
+	{
+            end = omp_get_wtime();
+            printf("Function 'allEqual' took %f seconds to complete\n", end - start);
             return false;
         }
     }
+    end = omp_get_wtime();
+    printf("Function 'allEqual' took %f seconds to complete\n", end - start);
     return true;
 }
 
 bool isPairwiseDistinct( int** matrix, int N) {
+    double start;
+    double end;
+    start = omp_get_wtime();
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
@@ -90,6 +119,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
                     if (row != i || col != j) {
                         int otherElement = matrix[row][col];
                         if (currentElement == otherElement) {
+                            end = omp_get_wtime();
+                            printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
                             return true;
                         }
                     }
@@ -97,12 +128,17 @@ bool isPairwiseDistinct( int** matrix, int N) {
             }
         }
     }
+    end = omp_get_wtime();
+    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
     return false;
 }
 
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
 {
+    double start;
+    double end;
+    start = omp_get_wtime();
     int row_sums[N];
     int col_sums[N];
     int main_diag_sum = 0;
@@ -114,6 +150,8 @@ bool isMagicSquare(int** matrix, int N)
         row_sums[i] = sumRow(matrix, i, N);
     }
     if (!allEqual(row_sums, N)) {
+        end = omp_get_wtime();
+        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
 	    return false;
     }
 
@@ -125,6 +163,8 @@ bool isMagicSquare(int** matrix, int N)
         col_sums[i] = sumColumn(matrix, i, N);
     }
     if (!allEqual(col_sums, N)) {
+        end = omp_get_wtime();
+        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
 	    return false;
     }
 
@@ -134,6 +174,8 @@ bool isMagicSquare(int** matrix, int N)
         main_diag_sum += matrix[i][i];
     }
     if (main_diag_sum != row_sum) {
+        end = omp_get_wtime();
+        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
 	    return false;
     }
 
@@ -143,17 +185,26 @@ bool isMagicSquare(int** matrix, int N)
         anti_diag_sum += matrix[i][N - 1 - i];
     }
     if (anti_diag_sum != row_sum) {
+        end = omp_get_wtime();
+        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
 	    return false;
     }
     
     if(isPairwiseDistinct(matrix, N)) {
+        end = omp_get_wtime();
+        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
 	    return false;
         }
+    end = omp_get_wtime();
+    printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
     return true;
 }
 
 int main(int argc, char *argv[])
 {
+    double start;
+    double end;
+    start = omp_get_wtime();
 
     if (argc != 3) {
         printf("Usage: %s <pattern_filename> <modifier_filename>\n", argv[0]);
@@ -198,6 +249,7 @@ int main(int argc, char *argv[])
     }
 
     // read-in matrix data
+    start = omp_get_wtime();
     for (int i = 0; i < N; i++) {
 	    pattern[i] = new int[N];
 	    modifier[i] = new int[N];
@@ -205,11 +257,15 @@ int main(int argc, char *argv[])
             if (fscanf(pattern_file, "%d", &pattern[i][j]) != 1) {
                 printf("Error reading matrix values pattern.\n");
                 fclose(pattern_file);
+                end = omp_get_wtime();
+                printf("Function 'main' took %f seconds to complete\n", end - start);
                 return 1;
             }
             if (fscanf(modifier_file, "%d", &modifier[i][j]) != 1) {
                 printf("Error reading matrix values modifier.\n");
                 fclose(modifier_file);
+                end = omp_get_wtime();
+                printf("Function 'main' took %f seconds to complete\n", end - start);
                 return 1;
             }
         }
@@ -239,6 +295,9 @@ int main(int argc, char *argv[])
     if(is_magic_square) printf("Generated matrix is a magic square.\n");
     else                printf("Generated matrix is not a magic square.\n");
 
+
+    end = omp_get_wtime();
+    printf("Function 'main' took %f seconds to complete\n", end - start);
     // free dynamically allocated memory
     for (int i = 0; i < M; i++) {
         delete[] magicSquare[i];
