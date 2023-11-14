@@ -6,12 +6,9 @@ SRC = magic_matrix.cpp
 TARGET = xmmGPU
 GPU_TARGET = magic_matrix_gpu.cu
 
-all: $(TARGET) $(GPU_TARGET)
-	$(TARGET): $(SRC)
-		$(CC) -o xmm $(SRC) $(LDFLAGS)
-		nvc++ $(LDFLAGS) -mp=gpu $(GPU_TARGET) -o $(TARGET)
-		
-
+$(TARGET): $(SRC)
+	$(CC) -o xmm $(SRC) $(LDFLAGS)
+	nvc++ $(LDFLAGS) -mp=gpu $(GPU_TARGET) -o $(TARGET)
 
 $(GPU_TARGET): $(SRC)
 	mmgpu -o $(GPU_TARGET) $(SRC) $(LDFLAGS)
