@@ -16,5 +16,5 @@ $(GPU_TARGET): $(SRC)
 	mmgpu -o $(GPU_TARGET) $(SRC) $(LDFLAGS)
 
 clean:
-	rm -f $(TARGET) $(GPU_TARGET)
+	rm -f $(TARGET)
 	rm -f xmm
