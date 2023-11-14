@@ -7,11 +7,11 @@ TARGET = xmmGPU
 GPU_TARGET = magic_matrix_gpu.cu
 
 all:
-	make xmmGPU
+	$(TARGET)
 
 $(TARGET): $(SRC)
 	$(CC) -o xmm $(SRC) $(LDFLAGS)
-	ncc $(LDFLAGS) -mp=gpu $(GPU_TARGET) -o $(TARGET)
+	nvcc -mp=gpu $(GPU_TARGET) -o $(TARGET) $(LDFLAGS)
 
 $(GPU_TARGET): $(SRC)
 	mmgpu -o $(GPU_TARGET) $(SRC) $(LDFLAGS)
