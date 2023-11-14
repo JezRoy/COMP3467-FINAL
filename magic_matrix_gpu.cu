@@ -22,6 +22,7 @@
 // NOTE TO SELF: vvvvvvv
 // COMPILE THIS CODE: nvc++ -fopenmp -mp=gpu magic_matrix.cpp -o xmm
 // RUN THIS CODE: ./xmm data_sets/pattern3x3.dat data_sets/modifier3x3.dat
+// OR THIS CODE: ./xmmGPU data_sets/pattern3x3.dat data_sets/modifier3x3.dat
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {
@@ -32,7 +33,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 		    modifier[i][j] *= M;
 	    }
     }
-
+    #pragma omp target teams distribute parallel for collapse(2) map(tofrom: magicSquare[0:M][0:M], modifier[0:N][0:N], pattern[0:N][0:N])
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
