@@ -9,8 +9,8 @@ GPU_TARGET = magic_matrix_gpu.cu
 all: $(TARGET) $(GPU_TARGET)
 
 $(TARGET): $(SRC)
-    $(CC) $(CFLAGS) -o xmm $(SRC) $(LDFLAGS)
-    $(CC) $(CFLAGS) -o $(TARGET) $(GPU_TARGET) $(LDFLAGS)
+    $(CC) -o xmm $(SRC) $(LDFLAGS)
+    $(CC) -o $(TARGET) $(GPU_TARGET) $(LDFLAGS)
 
 
 $(GPU_TARGET): $(SRC)
