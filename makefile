@@ -15,7 +15,7 @@ $(TARGET): $(SRC)
 	$(CC) -o $(TARGET) $(SRC) $(LDFLAGS)
 
 $(GPU_OUT): $(GPU_TARGET)
-	nvcc $(GPU_TARGET) -o $(GPU_OUT)
+	nvc++ $(GPU_TARGET) -o $(GPU_OUT)
 
 clean:
 	rm -f $(TARGET)
