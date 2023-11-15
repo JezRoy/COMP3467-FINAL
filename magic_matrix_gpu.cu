@@ -96,7 +96,7 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
-bool isPairwiseDistinct( int** matrix, int N) {
+bool isPairwiseDistinctOLD( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -124,7 +124,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     return false;
 }
 
-bool isPairwiseDistinctNEW( int** matrix, int N) {
+bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
