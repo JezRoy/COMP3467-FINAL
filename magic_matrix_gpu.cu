@@ -22,7 +22,7 @@
 // NOTE TO SELF: vvvvvvv
 // COMPILE THIS CODE: nvc++ -fopenmp -mp=gpu magic_matrix.cpp -o xmm
 // RUN THIS CODE: ./xmm data_sets/pattern3x3.dat data_sets/modifier3x3.dat
-// OR THIS CODE: ./xmmGPU data_sets/pattern3x3.dat data_sets/modifier3x3.dat
+// OR THIS CODE: ./xmmGPU data_sets/pattern10x10.dat data_sets/modifier10x10.dat
 
 double omp_get_wtime(void);
 
@@ -170,7 +170,7 @@ bool isMagicSquare(int** matrix, int N)
     int anti_diag_sum = 0;
 
     // compute row sums
-    #pragma omp parallel for shared(row_sums)
+    //#pragma omp parallel for shared(row_sums)
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
@@ -185,7 +185,7 @@ bool isMagicSquare(int** matrix, int N)
     row_sum = row_sums[0];
 
     // compute column sums
-    #pragma omp parallel for shared(col_sums)
+    //#pragma omp parallel for shared(col_sums)
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
@@ -198,7 +198,7 @@ bool isMagicSquare(int** matrix, int N)
     } */
 
     // compute sum of elements on main diagonal
-    #pragma omp parallel for reduction(+:main_diag_sum)
+    //#pragma omp parallel for reduction(+:main_diag_sum)
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
@@ -210,7 +210,7 @@ bool isMagicSquare(int** matrix, int N)
     } */
 
     // compute sum of elements on antidiagonal
-    #pragma omp parallel for reduction(+:anti_diag_sum)
+    //#pragma omp parallel for reduction(+:anti_diag_sum)
     for (int i = 0; i < N; i++)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
