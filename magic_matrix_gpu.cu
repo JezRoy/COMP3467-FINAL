@@ -153,7 +153,7 @@ bool isMagicSquare(int** matrix, int N)
     row_sum = row_sums[0];
 
     // compute column sums
-    #pragma omp parallel for num_threads(8) shared(col_sums)
+    #pragma omp parallel for num_threads(loops) shared(col_sums)
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
@@ -166,7 +166,7 @@ bool isMagicSquare(int** matrix, int N)
     } */
 
     // compute sum of elements on main diagonal
-    #pragma omp parallel for num_threads(loops) reduction(+:main_diag_sum)
+    #pragma omp parallel for num_threads(8) reduction(+:main_diag_sum)
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
