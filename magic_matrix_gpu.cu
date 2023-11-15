@@ -133,7 +133,7 @@ bool isMagicSquare(int** matrix, int N)
     int row_sums[N];
     int col_sums[N];
     int row_sum;
-    int loops = N * N;
+    int loops = (N * N) / 2;
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
 
