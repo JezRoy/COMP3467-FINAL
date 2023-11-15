@@ -96,10 +96,39 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
+bool isPairwiseDistinctOLD( int** matrix, int N) {
+    double start;
+    double end;
+    start = omp_get_wtime();
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+
+            int currentElement = matrix[i][j];
+            for (int row = 0; row < N; row++) {
+                for (int col = 0; col < N; col++) {
+
+                    if (row != i || col != j) {
+                        int otherElement = matrix[row][col];
+                        if (currentElement == otherElement) {
+                            end = omp_get_wtime();
+                            printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    end = omp_get_wtime();
+    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+    return false;
+}
+
 bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
+    #pragma omp parallel num_threads(8)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
 
@@ -138,7 +167,7 @@ bool isMagicSquare(int** matrix, int N)
     int anti_diag_sum = 0;
 
     // compute row sums
-    #pragma omp parallel for num_threads(loops) nowait shared(row_sums)
+    #pragma omp parallel for num_threads(loops) shared(row_sums)
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
@@ -153,7 +182,7 @@ bool isMagicSquare(int** matrix, int N)
     row_sum = row_sums[0];
 
     // compute column sums
-    #pragma omp parallel for num_threads(loops) nowait shared(col_sums)
+    #pragma omp parallel for num_threads(loops) shared(col_sums)
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
