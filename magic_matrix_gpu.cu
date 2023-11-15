@@ -165,6 +165,7 @@ bool isMagicSquare(int** matrix, int N)
     start = omp_get_wtime();
     int row_sums[N];
     int col_sums[N];
+    int row_sum;
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
 
@@ -236,7 +237,6 @@ bool isMagicSquare(int** matrix, int N)
     printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
     
     return isMagic;
-    return true;
 }
 
 int main(int argc, char *argv[])
