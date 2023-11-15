@@ -129,12 +129,12 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double end;
     start = omp_get_wtime();
     bool foundDups = false;
-    #pragma omp parallel for collapse(2) shared(foundDups)
+    #pragma omp parallel for num_threads(2) collapse(2) shared(foundDups)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             if (!foundDups) {
                 int currentElement = matrix[i][j];
-                #pragma omp parallel for collapse(2) shared(foundDups)
+                #pragma omp parallel for num_threads(2) collapse(2) shared(foundDups)
                 for (int row = 0; row < N; row++) {
                     for (int col = 0; col < N; col++) {
                         if (!foundDups && (row != i || col != j)) {
