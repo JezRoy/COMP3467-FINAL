@@ -143,7 +143,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
                                 #pragma omp critical
                                 {
                                     foundDups = true;
-                                    return !foundDups;
+                                    return foundDups;
                                 }
                             }
                         }
@@ -154,7 +154,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     }
     end = omp_get_wtime();
     printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-    return !foundDups;
+    return foundDups;
 }
 
 // checks if matrix is a magic square
