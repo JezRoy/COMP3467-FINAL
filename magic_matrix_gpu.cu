@@ -182,7 +182,7 @@ bool isMagicSquare(int** matrix, int N)
 	    return false;
     } */
 
-    int row_sum = row_sums[0];
+    row_sum = row_sums[0];
 
     // compute column sums
     #pragma omp parallel for shared(col_sums)
