@@ -143,6 +143,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
                                 #pragma omp critical
                                 {
                                     foundDups = true;
+                                    return !foundDups;
                                 }
                             }
                         }

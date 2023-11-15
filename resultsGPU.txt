@@ -211,14 +211,3 @@ Function 'isMagicSquare' took 0.218302 seconds to complete
 232 201 202 
 Generated matrix is a magic square.
 Function 'main' took 0.466991 seconds to complete
-
-/usr/bin/ld: /tmp/tmpxft_0028d5cf_00000000-11_magic_matrix_gpu.o: in function `generateMagicSquare(int**, int**, int**, int, int)':
-tmpxft_0028d5cf_00000000-6_magic_matrix_gpu.cudafe1.cpp:(.text+0x3a): undefined reference to `omp_get_wtime'
-/usr/bin/ld: tmpxft_0028d5cf_00000000-6_magic_matrix_gpu.cudafe1.cpp:(.text+0x1d3): undefined reference to `omp_get_wtime'
-/usr/bin/ld: /tmp/tmpxft_0028d5cf_00000000-11_magic_matrix_gpu.o: in function `allEqual(int*, int)':
-tmpxft_0028d5cf_00000000-6_magic_matrix_gpu.cudafe1.cpp:(.text+0x2d5): undefined reference to `omp_get_wtime'
-/usr/bin/ld: tmpxft_0028d5cf_00000000-6_magic_matrix_gpu.cudafe1.cpp:(.text+0x30c): undefined reference to `omp_get_wtime'
-/usr/bin/ld: tmpxft_0028d5cf_00000000-6_magic_matrix_gpu.cudafe1.cpp:(.text+0x355): undefined reference to `omp_get_wtime'
-/usr/bin/ld: /tmp/tmpxft_0028d5cf_00000000-11_magic_matrix_gpu.o:tmpxft_0028d5cf_00000000-6_magic_matrix_gpu.cudafe1.cpp:(.text+0x3a5): more undefined references to `omp_get_wtime' follow
-collect2: error: ld returned 1 exit status
-make: *** [makefile:14: xmmGPU] Error 1
