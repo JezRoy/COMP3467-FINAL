@@ -96,7 +96,7 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
-bool isPairwiseDistinctOLD( int** matrix, int N) {
+bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -124,38 +124,6 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
     return false;
 }
 
-bool isPairwiseDistinct( int** matrix, int N) {
-    double start;
-    double end;
-    start = omp_get_wtime();
-    bool foundDups = false;
-    #pragma omp parallel for num_threads(64) collapse(2) shared(matrix, foundDups)
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            if (!foundDups) {
-                int currentElement = matrix[i][j];
-                #pragma omp parallel for num_threads(64) collapse(2) shared(matrix, foundDups)
-                for (int row = 0; row < N; row++) {
-                    for (int col = 0; col < N; col++) {
-                        if (!foundDups && (row != i || col != j)) {
-                            int otherElement = matrix[row][col];
-                            if (currentElement == otherElement) {
-                                #pragma omp critical
-                                {
-                                    foundDups = true;
-                                    return !foundDups;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-    return !foundDups;
-}
 
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
@@ -170,7 +138,7 @@ bool isMagicSquare(int** matrix, int N)
     int anti_diag_sum = 0;
 
     // compute row sums
-    //#pragma omp parallel for shared(row_sums)
+    #pragma omp parallel for shared(row_sums)
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
@@ -185,7 +153,7 @@ bool isMagicSquare(int** matrix, int N)
     row_sum = row_sums[0];
 
     // compute column sums
-    //#pragma omp parallel for shared(col_sums)
+    #pragma omp parallel for shared(col_sums)
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
