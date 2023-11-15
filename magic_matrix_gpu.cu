@@ -129,12 +129,12 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double end;
     start = omp_get_wtime();
     bool foundDups = false;
-    #pragma omp parallel for num_threads(16) collapse(2) shared(matrix, foundDups)
+    #pragma omp parallel for num_threads(64) collapse(2) shared(matrix, foundDups)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             if (!foundDups) {
                 int currentElement = matrix[i][j];
-                #pragma omp parallel for num_threads(16) collapse(2) shared(matrix, foundDups)
+                #pragma omp parallel for num_threads(64) collapse(2) shared(matrix, foundDups)
                 for (int row = 0; row < N; row++) {
                     for (int col = 0; col < N; col++) {
                         if (!foundDups && (row != i || col != j)) {
@@ -158,7 +158,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
 }
 
 // checks if matrix is a magic square
-bool isMagicSquareNEW(int** matrix, int N)
+bool isMagicSquare(int** matrix, int N)
 {
     double start;
     double end;
@@ -240,7 +240,7 @@ bool isMagicSquareNEW(int** matrix, int N)
 }
 
 // checks if matrix is a magic square
-bool isMagicSquare(int** matrix, int N)
+bool isMagicSquareOLD(int** matrix, int N)
 {
     double start;
     double end;
