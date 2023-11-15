@@ -1,21 +1,21 @@
 CC = g++
-CFLAGS = -O3 -std=c++11
+CFLAGS = -O3 -std=c++11 -fopenmp
 LDFLAGS = -fopenmp
 
 SRC = magic_matrix.cpp
-TARGET = xmmGPU
+TARGET = xmm
 GPU_TARGET = magic_matrix_gpu.cu
+GPU_OUT = xmmGPU
 
 all:
-	make $(TARGET)
+	$(TARGET) $(GPU_OUT)
 
 $(TARGET): $(SRC)
 	$(CC) -o xmm $(SRC) $(LDFLAGS)
-	nvcc $(GPU_TARGET) -o $(TARGET)
 
-$(GPU_TARGET): $(SRC)
-	mmgpu -o $(GPU_TARGET) $(SRC) $(LDFLAGS)
+$(GPU_OUT): $(GPU_TARGET)
+	mmgpu -o $(GPU_TARGET) $(SRC)
 
 clean:
 	rm -f $(TARGET)
-	rm -f xmm
+	rm -f $(GPU_OUT)
