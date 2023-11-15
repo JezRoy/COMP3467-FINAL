@@ -12,10 +12,10 @@ all:
 	make $(GPU_OUT)
 
 $(TARGET): $(SRC)
-	$(CC) -o xmm $(SRC) $(LDFLAGS)
+	$(CC) -o $(TARGET) $(SRC) $(LDFLAGS)
 
 $(GPU_OUT): $(GPU_TARGET)
-	mmgpu -o $(GPU_TARGET) $(SRC)
+	nvcc $(GPU_TARGET) -o $(GPU_OUT)
 
 clean:
 	rm -f $(TARGET)
