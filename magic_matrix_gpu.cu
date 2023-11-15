@@ -128,10 +128,9 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp parallel num_threads(8)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-
+            #pragma omp parallel num_threads(8)
             int currentElement = matrix[i][j];
             for (int row = 0; row < N; row++) {
                 for (int col = 0; col < N; col++) {
