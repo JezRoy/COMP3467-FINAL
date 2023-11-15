@@ -22,7 +22,7 @@
 // NOTE TO SELF: vvvvvvv
 // COMPILE THIS CODE: nvc++ -fopenmp -mp=gpu magic_matrix.cpp -o xmm
 // RUN THIS CODE: ./xmm data_sets/pattern3x3.dat data_sets/modifier3x3.dat
-// OR THIS CODE: ./xmmGPU data_sets/pattern10x10.dat data_sets/modifier10x10.dat
+// OR THIS CODE: ./xmmGPU data_sets/pattern20x20.dat data_sets/modifier20x20.dat
 
 double omp_get_wtime(void);
 
@@ -129,12 +129,12 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double end;
     start = omp_get_wtime();
     bool foundDups = false;
-    #pragma omp parallel for num_threads(4) collapse(2) shared(matrix, foundDups)
+    #pragma omp parallel for num_threads(4) shared(matrix, foundDups)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             if (!foundDups) {
                 int currentElement = matrix[i][j];
-                #pragma omp parallel for num_threads(4) collapse(2) shared(matrix, foundDups)
+                #pragma omp parallel for num_threads(4) shared(matrix, foundDups)
                 for (int row = 0; row < N; row++) {
                     for (int col = 0; col < N; col++) {
                         if (!foundDups && (row != i || col != j)) {
