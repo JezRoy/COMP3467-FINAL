@@ -18,7 +18,7 @@ make all
 
 # Define paths
 dir="data_sets"
-EXECUTABLE="./xmmGPU"
+EXECUTABLE="./mmgpu"
 
 # Execute for N = 3
 echo "Running magic_matrix for N=3..."

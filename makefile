@@ -3,9 +3,9 @@ CFLAGS = -O3 -std=c++11 -fopenmp
 LDFLAGS = -fopenmp
 
 SRC = magic_matrix.cpp
-TARGET = xmm
+TARGET = mm
 GPU_TARGET = magic_matrix_gpu.cu
-GPU_OUT = xmmGPU
+GPU_OUT = mmgpu
 
 all:
 	make $(TARGET) 
