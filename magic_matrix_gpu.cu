@@ -31,23 +31,27 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp parallel for
-    for (int i = 0; i < N; i++)
+    #pragma omp target parallel for map(to:i, j, N) map(tofrom:modifier)
     {
-        for (int j = 0; j < N; j++)
+        for (int i = 0; i < N; i++)
         {
-		    modifier[i][j] *= M;
-	    }
+            for (int j = 0; j < N; j++)
+            {
+                modifier[i][j] *= M;
+            }
+        }
     }
-    #pragma omp parallel for
-    for (int i = 0; i < M; i++)
+    #pragma omp target parallel for map(to:i, j, M) map(tofrom:magicSquare)
     {
-        for (int j = 0; j < M; j++)
+        for (int i = 0; i < M; i++)
         {
-            int patternRow = i % N;
-            int patternCol = j % N;
-            magicSquare[i][j] = pattern[patternRow][patternCol];
-	        magicSquare[i][j] += modifier[i/N][j/N];
+            for (int j = 0; j < M; j++)
+            {
+                int patternRow = i % N;
+                int patternCol = j % N;
+                magicSquare[i][j] = pattern[patternRow][patternCol];
+                magicSquare[i][j] += modifier[i/N][j/N];
+            }
         }
     }
     end = omp_get_wtime();
