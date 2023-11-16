@@ -31,7 +31,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp parallel
+    #pragma omp target parallel for
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -39,7 +39,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 		    modifier[i][j] *= M;
 	    }
     }
-    
+    #pragma omp target parallel for
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
@@ -154,7 +154,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
 }
 
 // checks if matrix is a magic square
-bool isMagicSquare(int** matrix, int N)
+bool isMagicSquareNEW(int** matrix, int N)
 {
     double start;
     double end;
@@ -237,7 +237,7 @@ bool isMagicSquare(int** matrix, int N)
 }
 
 // checks if matrix is a magic square
-bool isMagicSquareOLD(int** matrix, int N)
+bool isMagicSquare(int** matrix, int N)
 {
     double start;
     double end;
