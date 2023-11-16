@@ -21,8 +21,8 @@
 
 // NOTE TO SELF: vvvvvvv
 // COMPILE THIS CODE: nvc++ -fopenmp -mp=gpu magic_matrix.cpp -o xmm
-// RUN THIS CODE: ./xmm data_sets/pattern3x3.dat data_sets/modifier3x3.dat
-// OR THIS CODE: ./xmmGPU data_sets/pattern20x20.dat data_sets/modifier20x20.dat
+// RUN THIS CODE: ./mm data_sets/pattern3x3.dat data_sets/modifier3x3.dat
+// OR THIS CODE: ./mmpgu data_sets/pattern20x20.dat data_sets/modifier20x20.dat
 
 double omp_get_wtime(void);
 
@@ -127,7 +127,7 @@ bool isPairwiseDistinctOLDEST( int** matrix, int N) {
     return false;
 }
 
-bool isPairwiseDistinctOLD( int** matrix, int N) {
+bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -157,7 +157,7 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
     return false;
 }
 
-bool isPairwiseDistinct(int** matrix, int N) {
+bool isPairwiseDistinctNEW(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
     bool distinct = true;
@@ -169,7 +169,7 @@ bool isPairwiseDistinct(int** matrix, int N) {
         for (int i = 0; i < N && distinct; ++i) {
             for (int j = 0; j < N && distinct; ++j) {
                 int currentElement = matrix[i][j];
-                #pragma omp parallel for collapse(2) shared(distinct)
+                //#pragma omp parallel for collapse(2) shared(distinct)
                 for (int row = 0; row < N && distinct; ++row) {
                     for (int col = 0; col < N && distinct; ++col) {
                         if (row != i || col != j) {
