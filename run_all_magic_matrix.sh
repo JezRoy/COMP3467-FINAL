@@ -7,8 +7,14 @@
 #SBATCH --time=00:30:00
 
 # Load required modules
+srun -n 1 -c 2 --gres=gpu:1g.10gb:1 --partition=ug-gpu-small --pty /bin/bash
+module load nvidia-hpc
 module load cuda
-module load gcc
+module load nvc++
+
+# Compile executable
+make clean
+make all
 
 # Define paths
 dir="data_sets"

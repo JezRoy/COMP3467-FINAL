@@ -31,7 +31,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp target for
+    #pragma omp target parallel for
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -39,7 +39,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 		    modifier[i][j] *= M;
 	    }
     }
-    #pragma omp target for
+    #pragma omp target parallel for
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
@@ -127,11 +127,11 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp target parallel collapse(2)
+    #pragma omp target teams distribute parallel collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            #pragma omp target parallel collapse(2) shared(i, j, currentElement)
+            #pragma omp target teams distribute parallel num_threads(N) collapse(2) shared(i, j, currentElement)
             for (int row = 0; row < N; row++) {
                 for (int col = 0; col < N; col++) {
 

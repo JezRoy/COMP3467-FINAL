@@ -49,7 +49,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
         }
     }
     end = omp_get_wtime();
-    printf("Function 'generateMagicSquare' took %f seconds to complete\n", end - start);
+    printf("Function 'generateMagicSquare' took %.15f seconds to complete\n", end - start);
 }
 
 // computes sum of elements in a row
@@ -64,7 +64,7 @@ int sumRow( int** matrix, int row, int N)
         sum += matrix[row][i];
     }
     end = omp_get_wtime();
-    printf("Function 'sumRow' took %f seconds to complete\n", end - start);
+    printf("Function 'sumRow' took %.15f seconds to complete\n", end - start);
     return sum;
 }
 
@@ -80,7 +80,7 @@ int sumColumn( int** matrix, int col, int N)
         sum += matrix[i][col];
     }
     end = omp_get_wtime();
-    printf("Function 'sumColumn' took %f seconds to complete\n", end - start);
+    printf("Function 'sumColumn' took %.15f seconds to complete\n", end - start);
     return sum;
 }
 
@@ -94,12 +94,12 @@ bool allEqual( int arr[], int N)
         if (arr[0] != arr[i])
 	{
             end = omp_get_wtime();
-            printf("Function 'allEqual' took %f seconds to complete\n", end - start);
+            printf("Function 'allEqual' took %.15f seconds to complete\n", end - start);
             return false;
         }
     }
     end = omp_get_wtime();
-    printf("Function 'allEqual' took %f seconds to complete\n", end - start);
+    printf("Function 'allEqual' took %.15f seconds to complete\n", end - start);
     return true;
 }
 
@@ -116,7 +116,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
                         int otherElement = matrix[row][col];
                         if (currentElement == otherElement) {
                             end = omp_get_wtime();
-                            printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+                            printf("Function 'isPairwiseDistinct' took %.15f seconds to complete\n", end - start);
                             return true;
                         }
                     }
@@ -125,7 +125,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
         }
     }
     end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+    printf("Function 'isPairwiseDistinct' took %.15f seconds to complete\n", end - start);
     return false;
 }
 
@@ -147,7 +147,7 @@ bool isMagicSquare(int** matrix, int N)
     }
     if (!allEqual(row_sums, N)) {
         end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
+        printf("Function 'isMagicSquare' took %.15f seconds to complete\n", end - start);
 	    return false;
     }
 
@@ -160,7 +160,7 @@ bool isMagicSquare(int** matrix, int N)
     }
     if (!allEqual(col_sums, N)) {
         end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
+        printf("Function 'isMagicSquare' took %.15f seconds to complete\n", end - start);
 	    return false;
     }
 
@@ -171,7 +171,7 @@ bool isMagicSquare(int** matrix, int N)
     }
     if (main_diag_sum != row_sum) {
         end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
+        printf("Function 'isMagicSquare' took %.15f seconds to complete\n", end - start);
 	    return false;
     }
 
@@ -182,17 +182,17 @@ bool isMagicSquare(int** matrix, int N)
     }
     if (anti_diag_sum != row_sum) {
         end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
+        printf("Function 'isMagicSquare' took %.15f seconds to complete\n", end - start);
 	    return false;
     }
     
     if(isPairwiseDistinct(matrix, N)) {
         end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
+        printf("Function 'isMagicSquare' took %.15f seconds to complete\n", end - start);
 	    return false;
         }
     end = omp_get_wtime();
-    printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
+    printf("Function 'isMagicSquare' took %.15f seconds to complete\n", end - start);
     return true;
 }
 
@@ -254,14 +254,14 @@ int main(int argc, char *argv[])
                 printf("Error reading matrix values pattern.\n");
                 fclose(pattern_file);
                 end = omp_get_wtime();
-                printf("Function 'main' took %f seconds to complete\n", end - start);
+                printf("Function 'main' took %.15f seconds to complete\n", end - start);
                 return 1;
             }
             if (fscanf(modifier_file, "%d", &modifier[i][j]) != 1) {
                 printf("Error reading matrix values modifier.\n");
                 fclose(modifier_file);
                 end = omp_get_wtime();
-                printf("Function 'main' took %f seconds to complete\n", end - start);
+                printf("Function 'main' took %.15f seconds to complete\n", end - start);
                 return 1;
             }
         }
@@ -293,7 +293,7 @@ int main(int argc, char *argv[])
 
 
     end = omp_get_wtime();
-    printf("Function 'main' took %f seconds to complete\n", end - start);
+    printf("Function 'main' took %.15f seconds to complete\n", end - start);
     // free dynamically allocated memory
     for (int i = 0; i < M; i++) {
         delete[] magicSquare[i];
