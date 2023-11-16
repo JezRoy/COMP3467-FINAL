@@ -154,7 +154,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
 }
 
 // checks if matrix is a magic square
-bool isMagicSquareNEW(int** matrix, int N)
+bool isMagicSquare(int** matrix, int N)
 {
     double start;
     double end;
@@ -167,7 +167,7 @@ bool isMagicSquareNEW(int** matrix, int N)
     int anti_diag_sum = 0;
 
     // compute row sums
-    #pragma omp parallel target distribute for num_threads(loops) shared(row_sums) reduction
+    #pragma omp target parallel distribute for num_threads(loops) shared(row_sums) reduction
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
@@ -182,7 +182,7 @@ bool isMagicSquareNEW(int** matrix, int N)
     row_sum = row_sums[0];
 
     // compute column sums
-    #pragma omp parallel target distribute for num_threads(loops) shared(col_sums) reduction
+    #pragma omp target parallel distribute for num_threads(loops) shared(col_sums) reduction
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
@@ -195,7 +195,7 @@ bool isMagicSquareNEW(int** matrix, int N)
     } */
 
     // compute sum of elements on main diagonal
-    #pragma omp parallel target for num_threads(4) reduction(+:main_diag_sum) private
+    #pragma omp target parallel for num_threads(4) reduction(+:main_diag_sum) private
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
@@ -207,7 +207,7 @@ bool isMagicSquareNEW(int** matrix, int N)
     } */
 
     // compute sum of elements on antidiagonal
-    #pragma omp parallel target for num_threads(4) reduction(+:anti_diag_sum) private
+    #pragma omp target parallel for num_threads(4) reduction(+:anti_diag_sum) private
     for (int i = 0; i < N; i++)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
@@ -237,7 +237,7 @@ bool isMagicSquareNEW(int** matrix, int N)
 }
 
 // checks if matrix is a magic square
-bool isMagicSquare(int** matrix, int N)
+bool isMagicSquareOLD(int** matrix, int N)
 {
     double start;
     double end;
