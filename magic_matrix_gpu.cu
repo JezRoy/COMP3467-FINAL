@@ -31,7 +31,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp distribute parallel for collapse(2)
+    
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -39,7 +39,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 		    modifier[i][j] *= M;
 	    }
     }
-    #pragma omp distribute parallel for collapse(2)
+    
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
@@ -168,7 +168,7 @@ bool isMagicSquare(int** matrix, int N)
     int anti_diag_sum = 0;
 
     // compute row sums
-    #pragma omp parallel target for num_threads(loops) shared(row_sums)
+    #pragma omp parallel target distribute for num_threads(loops) shared(row_sums)
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
@@ -183,7 +183,7 @@ bool isMagicSquare(int** matrix, int N)
     row_sum = row_sums[0];
 
     // compute column sums
-    #pragma omp parallel target for num_threads(loops) shared(col_sums)
+    #pragma omp parallel target distribute for num_threads(loops) shared(col_sums)
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
