@@ -8,7 +8,7 @@ GPU_TARGET = magic_matrix_gpu.cu
 GPU_OUT = mmgpu
 
 all:
-	export OMP_NUM_THREADS=4
+	export OMP_NUM_THREADS=16
 	make $(TARGET) 
 	make $(GPU_OUT)
 
