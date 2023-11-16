@@ -196,7 +196,7 @@ bool isMagicSquare(int** matrix, int N)
     } */
 
     // compute sum of elements on main diagonal
-    #pragma omp parallel target for num_threads(4) reduction(+:main_diag_sum)
+    #pragma omp parallel target distribute for num_threads(4) reduction(+:main_diag_sum)
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
@@ -208,7 +208,7 @@ bool isMagicSquare(int** matrix, int N)
     } */
 
     // compute sum of elements on antidiagonal
-    #pragma omp parallel target for num_threads(4) reduction(+:anti_diag_sum)
+    #pragma omp parallel target distribute for num_threads(4) reduction(+:anti_diag_sum)
     for (int i = 0; i < N; i++)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
