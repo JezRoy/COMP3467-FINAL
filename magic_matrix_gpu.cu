@@ -31,7 +31,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp target parallel for map(to:i, j, N) map(tofrom:modifier)
+    #pragma omp target map(to:i, j, N) map(tofrom:modifier) distribute parallel for
     {
         for (int i = 0; i < N; i++)
         {
@@ -41,7 +41,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             }
         }
     }
-    #pragma omp target parallel for map(to:i, j, M) map(tofrom:magicSquare)
+    #pragma omp target map(to:i, j, M) map(tofrom:magicSquare) distribute parallel for
     {
         for (int i = 0; i < M; i++)
         {
@@ -131,11 +131,11 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp target parallel collapse(2)
+    #pragma omp target map(to:i, j, N, M) distribute parallel collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            #pragma omp target parallel collapse(2)
+            #pragma omp target map(to: currentElement) distribute parallel collapse(2)
             for (int row = 0; row < N; row++) {
                 for (int col = 0; col < N; col++) {
 
@@ -171,7 +171,7 @@ bool isMagicSquare(int** matrix, int N)
     int anti_diag_sum = 0;
 
     // compute row sums
-    #pragma omp target parallel distribute for num_threads(loops) shared(row_sums) reduction
+    #pragma omp target distribute parallel for num_threads(loops) shared(row_sums) reduction
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
@@ -186,7 +186,7 @@ bool isMagicSquare(int** matrix, int N)
     row_sum = row_sums[0];
 
     // compute column sums
-    #pragma omp target parallel distribute for num_threads(loops) shared(col_sums) reduction
+    #pragma omp target distribute parallel for num_threads(loops) shared(col_sums) reduction
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
