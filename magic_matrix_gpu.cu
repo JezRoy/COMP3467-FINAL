@@ -101,7 +101,7 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
-bool isPairwiseDistinctOLD( int** matrix, int N) {
+bool isPairwiseDistinctOLDEST( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -127,7 +127,7 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
     return false;
 }
 
-bool isPairwiseDistinct( int** matrix, int N) {
+bool isPairwiseDistinctOLD( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -155,6 +155,37 @@ bool isPairwiseDistinct( int** matrix, int N) {
     end = omp_get_wtime();
     printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
     return false;
+}
+
+bool isPairwiseDistinct(int** matrix, int N) {
+    double start, end;
+    start = omp_get_wtime();
+    bool distinct = true;
+
+    #pragma omp target map(tofrom: distinct)
+    {
+        #pragma omp parallel for collapse(2) shared(distinct)
+        for (int i = 0; i < N && distinct; ++i) {
+            for (int j = 0; j < N && distinct; ++j) {
+                int currentElement = matrix[i][j];
+                #pragma omp parallel for collapse(2) shared(distinct)
+                for (int row = 0; row < N && distinct; ++row) {
+                    for (int col = 0; col < N && distinct; ++col) {
+                        if (row != i || col != j) {
+                            int otherElement = matrix[row][col];
+                            if (currentElement == otherElement) {
+                                distinct = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    end = omp_get_wtime();
+    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+    return distinct;
 }
 
 // checks if matrix is a magic square
