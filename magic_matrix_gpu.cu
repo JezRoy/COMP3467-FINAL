@@ -161,6 +161,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
+    omp_set_num_threads(N);
     #pragma omp target
     #pragma omp parallel for shared(matrix)
     for (int i = 0; i < N; i++) {
