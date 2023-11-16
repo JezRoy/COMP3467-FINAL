@@ -31,6 +31,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     double start;
     double end;
     start = omp_get_wtime();
+    #pragma omp target parallel for collapse(2)
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -38,7 +39,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 		    modifier[i][j] *= M;
 	    }
     }
-
+    #pragma omp target parallel for collapse(2)
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
@@ -132,7 +133,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            #pragma omp parallel for
+            #pragma omp target parallel for
             for (int row = 0; row < N; row++) {
                 for (int col = 0; col < N; col++) {
 
@@ -167,7 +168,7 @@ bool isMagicSquare(int** matrix, int N)
     int anti_diag_sum = 0;
 
     // compute row sums
-    #pragma omp parallel for num_threads(loops) shared(row_sums)
+    #pragma omp parallel target for num_threads(loops) shared(row_sums)
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
@@ -182,7 +183,7 @@ bool isMagicSquare(int** matrix, int N)
     row_sum = row_sums[0];
 
     // compute column sums
-    #pragma omp parallel for num_threads(loops) shared(col_sums)
+    #pragma omp parallel target for num_threads(loops) shared(col_sums)
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
@@ -195,7 +196,7 @@ bool isMagicSquare(int** matrix, int N)
     } */
 
     // compute sum of elements on main diagonal
-    #pragma omp parallel for num_threads(4) reduction(+:main_diag_sum)
+    #pragma omp parallel target for num_threads(4) reduction(+:main_diag_sum)
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
@@ -207,7 +208,7 @@ bool isMagicSquare(int** matrix, int N)
     } */
 
     // compute sum of elements on antidiagonal
-    #pragma omp parallel for num_threads(4) reduction(+:anti_diag_sum)
+    #pragma omp parallel target for num_threads(4) reduction(+:anti_diag_sum)
     for (int i = 0; i < N; i++)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
