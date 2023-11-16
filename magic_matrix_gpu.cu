@@ -138,6 +138,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
                     if (row != i || col != j) {
                         int otherElement = matrix[row][col];
                         if (currentElement == otherElement) {
+                            #pragma omp flush
                             end = omp_get_wtime();
                             printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
                             return true;
