@@ -31,7 +31,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp target parallel for
+    #pragma omp target for
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -39,7 +39,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 		    modifier[i][j] *= M;
 	    }
     }
-    #pragma omp target parallel for
+    #pragma omp target for
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
