@@ -131,11 +131,11 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp target map(to:i, j, N, M) distribute parallel collapse(2)
+    #pragma omp target map(to: N, M) parallel for collapse(2) shared(matrix)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            #pragma omp target map(to: currentElement) distribute parallel collapse(2)
+            #pragma omp parallel for collapse(2) shared(matrix, currentElement)
             for (int row = 0; row < N; row++) {
                 for (int col = 0; col < N; col++) {
 
@@ -155,38 +155,6 @@ bool isPairwiseDistinct( int** matrix, int N) {
     end = omp_get_wtime();
     printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
     return false;
-}
-
-bool isPairwiseDistinctNEW(int** matrix, int N) {
-    double start, end;
-    start = omp_get_wtime();
-    bool distinct = true;
-
-    //#pragma omp target map(tofrom: distinct)
-    //{
-        #pragma omp parallel for collapse(2) reduction(||: foundDuplicate)
-        // #pragma omp map(to: i, j) parallel for collapse(2) shared(distinct)
-        for (int i = 0; i < N && distinct; ++i) {
-            for (int j = 0; j < N && distinct; ++j) {
-                int currentElement = matrix[i][j];
-                //#pragma omp parallel for collapse(2) shared(distinct)
-                for (int row = 0; row < N && distinct; ++row) {
-                    for (int col = 0; col < N && distinct; ++col) {
-                        if (row != i || col != j) {
-                            int otherElement = matrix[row][col];
-                            if (currentElement == otherElement) {
-                                distinct = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    //}
-
-    end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-    return distinct;
 }
 
 bool isMagicSquare(int** matrix, int N) {
