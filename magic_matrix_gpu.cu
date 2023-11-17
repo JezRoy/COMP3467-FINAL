@@ -158,6 +158,7 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
     return false;
 }
 
+// Takes 50 seconds
 bool isPairwiseDistinctV1( int** matrix, int N) {
     double start;
     double end;
@@ -192,6 +193,7 @@ bool isPairwiseDistinctV1( int** matrix, int N) {
     }
 }
 
+// Takes 29 - 31 seconds
 bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
@@ -199,6 +201,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     // Turn matrix into a 1D array
     int* list = (int*)malloc(N * N * sizeof(int));
     int index = 0;
+    #pragma omp target map(tofrom: list[0:len]) parallel for
     for (int x = 0; x < N; x++) {
         for (int y = 0; y < N; y++) {
             list[index++] = matrix[x][y];
@@ -207,7 +210,6 @@ bool isPairwiseDistinct( int** matrix, int N) {
     int len = N * N;
     int duplicatesFound = 0;
     // Search for duplicates
-    //#pragma omp target teams map(to: list[0:len]) map(tofrom: duplicatesFound) parallel for collapse(2) reduction(+:duplicatesFound)
     #pragma omp target teams map(to: list[0:len]) map(tofrom: duplicatesFound) reduction(+:duplicatesFound) parallel for collapse(2)
     {
         for (int i = 0; i < len; i++) {
