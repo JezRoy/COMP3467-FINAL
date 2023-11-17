@@ -163,7 +163,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double end;
     start = omp_get_wtime();
     int duplicatesFound = 0; 
-    #pragma omp target parallel for map(to: matrix[[0:N]]) map(tofrom: duplicatesFound) collapse(2) reduction(+:duplicatesFound)
+    #pragma omp target parallel for map(to: matrix[0:N][0:N]) map(tofrom: duplicatesFound) collapse(2) reduction(+:duplicatesFound)
     {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
