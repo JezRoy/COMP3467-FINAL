@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
 
 
     end = omp_get_wtime();
-    printf("Function 'main' took %f seconds to complete\n", end - start);
+    printf("Function 'main' took %.15f seconds to complete\n", end - start);
     // free dynamically allocated memory
     for (int i = 0; i < M; i++) {
         delete[] magicSquare[i];
