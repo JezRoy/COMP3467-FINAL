@@ -158,7 +158,7 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
     return false;
 }
 
-bool isPairwiseDistinctV1( int** matrix, int N) {
+bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -193,7 +193,7 @@ bool isPairwiseDistinctV1( int** matrix, int N) {
 }
 
 // improved function leveraging hashing to achieve better performance
-bool isPairwiseDistinct(int** matrix, int N) {
+bool isPairwiseDistinctV2(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
 
