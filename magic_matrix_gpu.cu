@@ -366,6 +366,7 @@ bool isMagicSquare(int** matrix, int N)
     
     if(isPairwiseDistinct(matrix, N)) {
         end = omp_get_wtime();
+        printf("is pairwise distinct\n");
         printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
 	    return false;
         }
