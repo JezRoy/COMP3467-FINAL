@@ -163,7 +163,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double end;
     start = omp_get_wtime();
     int duplicatesFound = 0; 
-    #pragma omp target parallel for map(to: matrix[0:N][0:N]) map(tofrom: duplicatesFound) collapse(2) reduction(+:duplicatesFound)
+    #pragma omp target map(to: matrix[0:N][0:N]) map(tofrom: duplicatesFound) parallel for collapse(2) reduction(+:duplicatesFound)
     {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -196,7 +196,38 @@ bool isPairwiseDistinct( int** matrix, int N) {
 bool isPairwiseDistinctV2(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
+    // Create an unordered set to store unique elements encountered
+    std::unordered_set<int> elements;
+    bool foundDuplicate = false; // Flag to indicate if a duplicate is found
 
+    #pragma omp parallel for collapse(2)
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            int currentElement = matrix[i][j];
+
+            // Use hashing to check uniqueness
+            #pragma omp critical
+            {
+                if (elements.find(currentElement) != elements.end()) {
+                    // Set the flag and exit the loop if a duplicate is found
+                    foundDuplicate = true;
+                } else {
+                    elements.insert(currentElement); // Add the element to the set
+                }
+            }
+        }
+    }
+
+    end = omp_get_wtime();
+    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+
+    if (foundDuplicate) {
+        printf("Duplicate elements found\n");
+        return false; // Return false if duplicates are found
+    } else {
+        printf("No duplicate elements found\n");
+        return true; // Return true if no duplicates are found
+    }
 }
 
 bool isMagicSquare(int** matrix, int N) {
