@@ -235,6 +235,7 @@ bool isPairwiseDistinctV2( int** matrix, int N) {
 }
 
 // improved function leveraging hashing to achieve better performance
+// Takes 0.05 - 0.06 seconds
 bool isPairwiseDistinct(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
@@ -242,7 +243,7 @@ bool isPairwiseDistinct(int** matrix, int N) {
     std::unordered_set<int> elements;
     bool foundDuplicate = false; // Flag to indicate if a duplicate is found
 
-    #pragma omp parallel for collapse(2)
+    #pragma omp target parallel for collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
@@ -272,6 +273,7 @@ bool isPairwiseDistinct(int** matrix, int N) {
     }
 }
 
+// checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
@@ -298,157 +300,6 @@ bool isMagicSquare(int** matrix, int N) {
     printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
 
     return isMagic;
-}
-
-// checks if matrix is a magic square
-bool isMagicSquareOLD(int** matrix, int N)
-{
-    double start;
-    double end;
-    start = omp_get_wtime();
-    int row_sums[N];
-    int col_sums[N];
-    int row_sum;
-    int loops = N * N;
-    int main_diag_sum = 0;
-    int anti_diag_sum = 0;
-
-    // compute row sums
-    #pragma omp target distribute parallel for num_threads(loops) shared(row_sums) reduction
-    for (int i = 0; i < N; i++)
-    {
-        row_sums[i] = sumRow(matrix, i, N);
-    }
-
-/*     if (!allEqual(row_sums, N)) {
-        end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-    } */
-
-    row_sum = row_sums[0];
-
-    // compute column sums
-    #pragma omp target distribute parallel for num_threads(loops) shared(col_sums) reduction
-    for (int i = 0; i < N; i++)
-    {
-        col_sums[i] = sumColumn(matrix, i, N);
-    }
-
-/*     if (!allEqual(col_sums, N)) {
-        end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-    } */
-
-    // compute sum of elements on main diagonal
-    #pragma omp target parallel for num_threads(4) reduction(+:main_diag_sum) private
-    for (int i = 0; i < N; i++)
-    {
-        main_diag_sum += matrix[i][i];
-    }
-/*     if (main_diag_sum != row_sum) {
-        end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-    } */
-
-    // compute sum of elements on antidiagonal
-    #pragma omp target parallel for num_threads(4) reduction(+:anti_diag_sum) private
-    for (int i = 0; i < N; i++)
-    {
-        anti_diag_sum += matrix[i][N - 1 - i];
-    }
-/*     if (anti_diag_sum != row_sum) {
-        end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-    } */
-    
-/*     if(isPairwiseDistinct(matrix, N)) {
-        end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-        } */
-
-    bool isMagic = true;
-    if (!allEqual(row_sums, N) || !allEqual(col_sums, N) || main_diag_sum != row_sums[0] ||
-        anti_diag_sum != row_sums[0] || isPairwiseDistinct(matrix, N)) {
-        isMagic = false;
-    }
-
-    end = omp_get_wtime();
-    printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-    
-    return isMagic;
-}
-
-// checks if matrix is a magic square
-bool isMagicSquareOLDEST(int** matrix, int N)
-{
-    double start;
-    double end;
-    start = omp_get_wtime();
-    int row_sums[N];
-    int col_sums[N];
-    int main_diag_sum = 0;
-    int anti_diag_sum = 0;
-
-    // compute row sums
-    for (int i = 0; i < N; i++)
-    {
-        row_sums[i] = sumRow(matrix, i, N);
-    }
-    if (!allEqual(row_sums, N)) {
-        end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-    }
-
-    int row_sum = row_sums[0];
-
-    // compute column sums
-    for (int i = 0; i < N; i++)
-    {
-        col_sums[i] = sumColumn(matrix, i, N);
-    }
-    if (!allEqual(col_sums, N)) {
-        end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-    }
-
-    // compute sum of elements on main diagonal
-    for (int i = 0; i < N; i++)
-    {
-        main_diag_sum += matrix[i][i];
-    }
-    if (main_diag_sum != row_sum) {
-        end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-    }
-
-    // compute sum of elements on antidiagonal
-    for (int i = 0; i < N; i++)
-    {
-        anti_diag_sum += matrix[i][N - 1 - i];
-    }
-    if (anti_diag_sum != row_sum) {
-        end = omp_get_wtime();
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-    }
-    
-    if(!isPairwiseDistinct(matrix, N)) {
-        end = omp_get_wtime();
-        printf("isn't pairwise distinct\n");
-        printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-	    return false;
-        }
-    end = omp_get_wtime();
-    printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-    return true;
 }
 
 int main(int argc, char *argv[])
