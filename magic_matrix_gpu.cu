@@ -162,21 +162,19 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double end;
     start = omp_get_wtime();
     omp_set_num_threads(N);
+    bool duplicatesFound = false;
     #pragma omp target map(tofrom: matrix)
     #pragma omp parallel for collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            #pragma omp parallel for collapse(2)
+            //#pragma omp parallel for collapse(2)
             for (int row = 0; row < N; row++) {
                 for (int col = 0; col < N; col++) {
                     if (row != i || col != j) {
                         int otherElement = matrix[row][col];
                         if (currentElement == otherElement) {
-                            #pragma omp critical
-                            end = omp_get_wtime();
-                            printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-                            return true;
+                            duplicatesFound = true;
                         }
                     }
                 }
@@ -185,7 +183,11 @@ bool isPairwiseDistinct( int** matrix, int N) {
     }
     end = omp_get_wtime();
     printf("Function 'isPairwiseDistinct' <loop 1> took %f seconds to complete\n", end - start);
-    return false;
+    if (duplicatesFound == false) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool isMagicSquare(int** matrix, int N) {
