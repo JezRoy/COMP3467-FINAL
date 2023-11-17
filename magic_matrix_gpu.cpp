@@ -103,7 +103,7 @@ bool allEqual( int arr[], int N)
 }
 
 // Takes 50 seconds
-bool isPairwiseDistinctV1( int** matrix, int N) {
+bool isPairwiseDistinctOLD( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -126,47 +126,6 @@ bool isPairwiseDistinctV1( int** matrix, int N) {
             }
         }
     }
-    end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-    if (duplicatesFound > 0) {
-        printf("found duplicate\n");
-        return false;
-    } else {
-        printf("no duplicate found\n");
-        return true;
-    }
-}
-
-// Takes 29 - 31 seconds
-bool isPairwiseDistinctV2( int** matrix, int N) {
-    double start;
-    double end;
-    start = omp_get_wtime();
-    // Turn matrix into a 1D array
-    int* list = (int*)new(N * N * sizeof(int));
-    int index = 0;
-    #pragma omp target map(tofrom: list[0:len]) parallel for
-    for (int x = 0; x < N; x++) {
-        for (int y = 0; y < N; y++) {
-            list[index++] = matrix[x][y];
-        }
-    }
-    int len = N * N;
-    int duplicatesFound = 0;
-    // Search for duplicates
-    #pragma omp target teams num_thread(4) map(to: list[0:len]) map(tofrom: duplicatesFound) reduction(+:duplicatesFound) parallel for collapse(2)
-    {
-        for (int i = 0; i < len; i++) {
-            int currentElement = list[i];
-            for (int j = i + 1; j < len; j++) {
-                int otherElement = list[j];
-                if (currentElement == otherElement) {
-                    duplicatesFound = duplicatesFound + 1;
-                }
-            }
-        }
-    }
-    delete(list);
     end = omp_get_wtime();
     printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
     if (duplicatesFound > 0) {
