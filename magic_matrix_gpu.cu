@@ -207,7 +207,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
     int len = N * N;
     int duplicatesFound = 0;
     // Search for duplicates
-    #pragma omp target teams map(to: list[0:len]) map(tofrom: duplicatesFound) parallel for collapse(2) reduction(+:duplicatesFound)
+    //#pragma omp target teams map(to: list[0:len]) map(tofrom: duplicatesFound) parallel for collapse(2) reduction(+:duplicatesFound)
+    #pragma omp target teams map(to: list[0:len]) map(tofrom: duplicatesFound) reduction(+:duplicatesFound) parallel for collapse(2)
     {
         for (int i = 0; i < len; i++) {
             int currentElement = list[i];
