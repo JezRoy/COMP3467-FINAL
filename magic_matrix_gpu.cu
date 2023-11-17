@@ -194,7 +194,7 @@ bool isPairwiseDistinctV1( int** matrix, int N) {
 }
 
 // Takes 29 - 31 seconds
-bool isPairwiseDistinct( int** matrix, int N) {
+bool isPairwiseDistinctV2( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -235,7 +235,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
 }
 
 // improved function leveraging hashing to achieve better performance
-bool isPairwiseDistinctV3(int** matrix, int N) {
+bool isPairwiseDistinct(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
     // Create an unordered set to store unique elements encountered
