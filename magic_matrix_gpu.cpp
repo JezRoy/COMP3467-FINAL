@@ -203,7 +203,8 @@ bool isPairwiseDistinct(int** matrix, int N) {
             // Set the hash table entry to true indicating presence of the value
         }
     }
-
+    end = omp_get_wtime();
+    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
     if (foundDuplicate) {
         printf("Duplicate elements found\n");
         return false; // Return false if duplicates are found
@@ -211,8 +212,6 @@ bool isPairwiseDistinct(int** matrix, int N) {
         printf("No duplicate elements found\n");
         return true; // Return true if no duplicates are found
     }
-    end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
 }
 
 // checks if matrix is a magic square
