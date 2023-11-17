@@ -22,7 +22,7 @@
 // NOTE TO SELF: vvvvvvv
 // COMPILE THIS CODE: nvc++ -fopenmp -mp=gpu magic_matrix.cpp -o xmm
 // RUN THIS CODE: ./mm data_sets/pattern3x3.dat data_sets/modifier3x3.dat
-// OR THIS CODE: ./mmpgu data_sets/pattern20x20.dat data_sets/modifier20x20.dat
+// OR THIS CODE: ./mmgpu data_sets/pattern20x20.dat data_sets/modifier20x20.dat
 
 double omp_get_wtime(void);
 
