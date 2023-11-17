@@ -4,7 +4,7 @@ LDFLAGS = -fopenmp
 
 SRC = magic_matrix.cpp
 TARGET = mm
-GPU_TARGET = magic_matrix_gpu.cu
+GPU_TARGET = magic_matrix_gpu.cpp
 GPU_OUT = mmgpu
 
 all:
