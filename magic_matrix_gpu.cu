@@ -158,12 +158,12 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
     return false;
 }
 
-bool isPairwiseDistinct( int** matrix, int N) {
+bool isPairwiseDistinctV1( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
     int duplicatesFound = 0; 
-    #pragma omp target map(to: matrix[0:N][0:N]) map(tofrom: duplicatesFound) parallel for collapse(2) reduction(+:duplicatesFound)
+    #pragma omp target teams map(to: matrix[0:N][0:N]) map(tofrom: duplicatesFound) parallel for collapse(2) reduction(+:duplicatesFound)
     {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -192,8 +192,47 @@ bool isPairwiseDistinct( int** matrix, int N) {
     }
 }
 
+bool isPairwiseDistinct( int** matrix, int N) {
+    double start;
+    double end;
+    start = omp_get_wtime();
+    // Turn matrix into a 1D array
+    int* list = (int*)malloc(N * N * sizeof(int));
+    int index = 0;
+    for (int x = 0; x < N; x++) {
+        for (int y = 0; y < N; y++) {
+            list[index++] = matrix[x][y];
+        }
+    }
+    int len = N * N;
+    int duplicatesFound = 0;
+    // Search for duplicates
+    #pragma omp target teams map(to: list[0:len]) map(tofrom: duplicatesFound) parallel for collapse(2) reduction(+:duplicatesFound)
+    {
+        for (int i = 0; i < len; i++) {
+            int currentElement = list[i];
+            for (int j = i + 1; j < len; j++) {
+                int otherElement = list[j];
+                if (currentElement == otherElement) {
+                    duplicatesFound = duplicatesFound + 1;
+                }
+            }
+        }
+    }
+    free(list);
+    end = omp_get_wtime();
+    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+    if (duplicatesFound > 0) {
+        printf("found duplicate\n");
+        return false;
+    } else {
+        printf("no duplicate found\n");
+        return true;
+    }
+}
+
 // improved function leveraging hashing to achieve better performance
-bool isPairwiseDistinctV2(int** matrix, int N) {
+bool isPairwiseDistinctV3(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
     // Create an unordered set to store unique elements encountered
