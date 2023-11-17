@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <omp.h>
+#include <unordered_set>
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
@@ -157,12 +158,12 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
     return false;
 }
 
-bool isPairwiseDistinct( int** matrix, int N) {
+bool isPairwiseDistinctV1( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
     int duplicatesFound = 0; 
-    #pragma omp target parallel for map(to: matrix) map(tofrom: duplicatesFound) collapse(2) reduction(+:duplicatesFound)
+    #pragma omp target parallel for map(to: matrix[[0:N]]) map(tofrom: duplicatesFound) collapse(2) reduction(+:duplicatesFound)
     {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -189,6 +190,13 @@ bool isPairwiseDistinct( int** matrix, int N) {
         printf("no duplicate found\n");
         return true;
     }
+}
+
+// improved function leveraging hashing to achieve better performance
+bool isPairwiseDistinct(int** matrix, int N) {
+    double start, end;
+    start = omp_get_wtime();
+
 }
 
 bool isMagicSquare(int** matrix, int N) {
