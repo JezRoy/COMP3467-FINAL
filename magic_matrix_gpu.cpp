@@ -143,7 +143,7 @@ bool isPairwiseDistinctV2( int** matrix, int N) {
     double end;
     start = omp_get_wtime();
     // Turn matrix into a 1D array
-    int* list = (int*)malloc(N * N * sizeof(int));
+    int* list = (int*)new(N * N * sizeof(int));
     int index = 0;
     #pragma omp target map(tofrom: list[0:len]) parallel for
     for (int x = 0; x < N; x++) {
@@ -166,7 +166,7 @@ bool isPairwiseDistinctV2( int** matrix, int N) {
             }
         }
     }
-    free(list);
+    delete(list);
     end = omp_get_wtime();
     printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
     if (duplicatesFound > 0) {
