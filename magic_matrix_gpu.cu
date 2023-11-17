@@ -32,7 +32,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     double start;
     double end;
     start = omp_get_wtime();
-    #pragma omp target map(to:i, j, N) map(tofrom:modifier) distribute parallel for
+    #pragma omp target map(to:i, j, N) map(tofrom:modifier[0:N][0:N]) distribute parallel for
     {
         for (int i = 0; i < N; i++)
         {
@@ -42,7 +42,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             }
         }
     }
-    #pragma omp target map(to:i, j, M) map(tofrom:magicSquare) distribute parallel for
+    #pragma omp target map(to:i, j, M) map(tofrom:magicSquare[0:N][0:N]) distribute parallel for
     {
         for (int i = 0; i < M; i++)
         {
@@ -210,7 +210,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     int len = N * N;
     int duplicatesFound = 0;
     // Search for duplicates
-    #pragma omp target teams map(to: list[0:len]) map(tofrom: duplicatesFound) reduction(+:duplicatesFound) parallel for collapse(2)
+    #pragma omp target teams num_thread(8) map(to: list[0:len]) map(tofrom: duplicatesFound) reduction(+:duplicatesFound) parallel for collapse(2)
     {
         for (int i = 0; i < len; i++) {
             int currentElement = list[i];
