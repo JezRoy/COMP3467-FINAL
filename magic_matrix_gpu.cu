@@ -62,7 +62,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 int sumRow( int** matrix, int row, int N)
 {
     int sum = 0;
-    #pragma omp parallel for reduction(+:sum)
+    #pragma omp teams distribute parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -74,7 +74,7 @@ int sumRow( int** matrix, int row, int N)
 int sumColumn( int** matrix, int col, int N)
 {
     int sum = 0;
-    #pragma omp parallel for reduction(+:sum)
+    #pragma omp teams distribute parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
@@ -199,7 +199,7 @@ bool isMagicSquare(int** matrix, int N) {
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
 
-    #pragma omp target parallel for map(to: matrix[0:N][0:N]) map(tofrom: row_sums[0:N], col_sums[0:N], main_diag_sum, anti_diag_sum)
+    #pragma omp target teams distribute parallel for map(to: matrix[0:N][0:N]) map(tofrom: row_sums[0:N], col_sums[0:N], main_diag_sum, anti_diag_sum)
     for (int i = 0; i < N; i++) {
         row_sums[i] = sumRow(matrix, i, N);
         col_sums[i] = sumColumn(matrix, i, N);
