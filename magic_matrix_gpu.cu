@@ -180,8 +180,6 @@ bool isPairwiseDistinct( int** matrix, int N) {
                         }
                     }
                 }
-                end = omp_get_wtime();
-                printf("Function loop 4 took %f seconds to complete\n", end - start);
             }
             end = omp_get_wtime();
             printf("Function loop 3 took %f seconds to complete\n", end - start);
