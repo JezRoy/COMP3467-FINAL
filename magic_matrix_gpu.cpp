@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <omp.h>
-#include <unordered_set>
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
@@ -139,7 +138,7 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
 
 // improved function leveraging hashing to achieve better performance
 // Takes 0.05 - 0.06 seconds
-bool isPairwiseDistinct(int** matrix, int N) {
+/* bool isPairwiseDistinctV1(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
     // Create an unordered set to store unique elements encountered
@@ -174,6 +173,46 @@ bool isPairwiseDistinct(int** matrix, int N) {
         printf("No duplicate elements found\n");
         return true; // Return true if no duplicates are found
     }
+} */
+
+// improved function leveraging hashing to achieve better performance 
+bool isPairwiseDistinct(int** matrix, int N) {
+    double start;
+    double end;
+    start = omp_get_wtime();
+    int len = N * N;
+    bool foundDuplicate = false;
+
+    // Define a hash table array
+    bool hashTable[10000] = {false};  // Assuming a maximum size for the hash table
+
+    #pragma omp target map(to: matrix[0:N][0:N]) map(tofrom: hashTable[0:10000]) shared(hashTable) parallel for collapse(2)
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            int hashValue = matrix[i][j] % 10000;  // Basic hash function using modulo
+
+            #pragma omp critical
+            {
+                // Check if the value already exists in the hash table
+                if (hashTable[hashValue]) {
+                    foundDuplicate = true;
+                } else {
+                    hashTable[hashValue] = true;
+                }
+            }
+            // Set the hash table entry to true indicating presence of the value
+        }
+    }
+
+    if (foundDuplicate) {
+        printf("Duplicate elements found\n");
+        return false; // Return false if duplicates are found
+    } else {
+        printf("No duplicate elements found\n");
+        return true; // Return true if no duplicates are found
+    }
+    end = omp_get_wtime();
+    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
 }
 
 // checks if matrix is a magic square

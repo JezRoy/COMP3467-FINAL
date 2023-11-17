@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=magic_matrix_parallel
 #SBATCH --output=magic_matrix_output.txt
+#SBATCH --gres=gpu
 #SBATCH --partition=ug-gpu-small
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=4
