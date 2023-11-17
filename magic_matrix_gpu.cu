@@ -161,19 +161,19 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
-    //omp_set_num_threads(N);
-    //#pragma omp target teams
-    //#pragma omp parallel for shared(matrix)
+    omp_set_num_threads(N);
+    #pragma omp target map(tofrom: matrix)
+    #pragma omp parallel for collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            //#pragma omp target distribute parallel for
+            #pragma omp parallel for collapse(2)
             for (int row = 0; row < N; row++) {
                 for (int col = 0; col < N; col++) {
                     if (row != i || col != j) {
                         int otherElement = matrix[row][col];
                         if (currentElement == otherElement) {
-                            //#pragma omp critical
+                            #pragma omp critical
                             end = omp_get_wtime();
                             printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
                             return true;
@@ -181,11 +181,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
                     }
                 }
             }
-            end = omp_get_wtime();
-            printf("Function loop 3 took %f seconds to complete\n", end - start);
         }
-        end = omp_get_wtime();
-        printf("Function loop 2 took %f seconds to complete\n", end - start);
     }
     end = omp_get_wtime();
     printf("Function 'isPairwiseDistinct' <loop 1> took %f seconds to complete\n", end - start);
