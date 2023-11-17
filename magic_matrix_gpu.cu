@@ -102,62 +102,6 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
-bool isPairwiseDistinctOLDEST( int** matrix, int N) {
-    double start;
-    double end;
-    start = omp_get_wtime();
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            int currentElement = matrix[i][j];
-            for (int row = 0; row < N; row++) {
-                for (int col = 0; col < N; col++) {
-                    if (row != i || col != j) {
-                        int otherElement = matrix[row][col];
-                        if (currentElement == otherElement) {
-                            end = omp_get_wtime();
-                            printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-    return false;
-}
-
-bool isPairwiseDistinctOLD( int** matrix, int N) {
-    double start;
-    double end;
-    start = omp_get_wtime();
-    #pragma omp target map(to: N, M) parallel for collapse(2) shared(matrix)
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            int currentElement = matrix[i][j];
-            #pragma omp parallel for collapse(2) shared(matrix, currentElement)
-            for (int row = 0; row < N; row++) {
-                for (int col = 0; col < N; col++) {
-
-                    if (row != i || col != j) {
-                        int otherElement = matrix[row][col];
-                        if (currentElement == otherElement) {
-                            #pragma omp flush
-                            end = omp_get_wtime();
-                            printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-    return false;
-}
-
 // Takes 50 seconds
 bool isPairwiseDistinctV1( int** matrix, int N) {
     double start;
@@ -243,7 +187,7 @@ bool isPairwiseDistinct(int** matrix, int N) {
     std::unordered_set<int> elements;
     bool foundDuplicate = false; // Flag to indicate if a duplicate is found
 
-    #pragma omp target parallel for collapse(2)
+    #pragma omp target map(matrix[0:N][0:N]) parallel for collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
