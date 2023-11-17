@@ -161,9 +161,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
-    int duplicatesFound = 0;
-    //#pragma omp target map(tofrom: matrix)
-    #pragma omp target parallel for collapse(2) reduction(+:duplicatesFound)
+    int duplicatesFound = 0; 
+    #pragma omp target parallel for map(tofrom: matrix, duplicatesFound) collapse(2) reduction(+:duplicatesFound)
     {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -173,7 +172,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
                         if (row != i || col != j) {
                             int otherElement = matrix[row][col];
                             if (currentElement == otherElement) {
-                                duplicatesFound++;
+                                duplicatesFound = duplicatesFound + 1;
                             }
                         }
                     }
@@ -184,13 +183,15 @@ bool isPairwiseDistinct( int** matrix, int N) {
     end = omp_get_wtime();
     printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
     if (duplicatesFound > 0) {
+        printf("found duplicate\n");
         return false;
     } else {
+        printf("no duplicate found\n");
         return true;
     }
 }
 
-bool isMagicSquare(int** matrix, int N) {
+bool isMagicSquareNEW(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
     int row_sums[N];
@@ -307,7 +308,7 @@ bool isMagicSquareOLD(int** matrix, int N)
 }
 
 // checks if matrix is a magic square
-bool isMagicSquareOLDEST(int** matrix, int N)
+bool isMagicSquare(int** matrix, int N)
 {
     double start;
     double end;
