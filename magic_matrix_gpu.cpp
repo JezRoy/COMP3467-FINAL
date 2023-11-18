@@ -145,23 +145,24 @@ bool isPairwiseDistinct(int** matrix, int N) {
     start = omp_get_wtime();
     int len = 400;
     bool foundDuplicate = false;
-
+    int max = -1;
     // Define a hash table array
     bool hashTable[len] = {false};  // Assuming a maximum size for the hash table
 
-    #pragma omp map(to: matrix[0:N][0:N]) map(tofrom: hashTable[0:len]) shared(hashTable) parallel for collapse(2)
+    #pragma omp map(to: matrix[0:N][0:N]) map(tofrom: hashTable[0:len]) shared(hashTable, max) parallel for collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = i + 1; j < N; j++) {
             int hashValue = matrix[i][j] % len;  // Basic hash function using modulo
-            
-            {
-                // Check if the value already exists in the hash table
-                if (hashTable[hashValue]) {
-                    foundDuplicate = true;
-                    printf("%d goes to %d\n", matrix[i][j], hashValue);
-                } else {
-                    hashTable[hashValue] = true;
-                }
+            // To check the highest number in the N x N matrix - debugging thing
+            if (matrix[i][j] > max) {
+                max = matrix[i][j];
+            }
+            // Check if the value already exists in the hash table
+            if (hashTable[hashValue]) {
+                foundDuplicate = true;
+                printf("%d goes to %d\n", matrix[i][j], hashValue);
+            } else {
+                hashTable[hashValue] = true;
             }
             // Set the hash table entry to true indicating presence of the value
         }
