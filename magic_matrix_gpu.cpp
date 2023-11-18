@@ -158,7 +158,7 @@ bool isPairwiseDistinct(int** matrix, int N) {
                 // Check if the value already exists in the hash table
                 if (hashTable[hashValue]) {
                     foundDuplicate = true;
-                    printf("%d goes to %d\n", hashValue, hashValue % len);
+                    printf("%d goes to %d\n", matrix[i][j], hashValue);
                 } else {
                     hashTable[hashValue] = true;
                 }
