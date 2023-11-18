@@ -10,7 +10,7 @@ GPU_OUT = mmgpu
 all:
 	make $(TARGET) 
 	make $(GPU_OUT)
-	./mmgpu data_sets/pattern20x20.dat data_sets/modifier20x20.dat
+	./mmgpu data_sets/pattern10x10.dat data_sets/modifier10x10.dat
 
 $(TARGET): $(SRC)
 	$(CC) -o $(TARGET) $(SRC) $(LDFLAGS)
