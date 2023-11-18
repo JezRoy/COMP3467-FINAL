@@ -139,7 +139,7 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
 
 // improved function leveraging hashing to achieve better performance 
 // Takes 0.05 - 0.06 seconds
-bool isPairwiseDistinctV1(int** matrix, int N) {
+bool isPairwiseDistinct(int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -158,7 +158,7 @@ bool isPairwiseDistinctV1(int** matrix, int N) {
                 // Check if the value already exists in the hash table
                 if (hashTable[hashValue]) {
                     foundDuplicate = true;
-                    printf("%d\n", hashValue);
+                    printf("%d goes to %d\n", hashValue, hashValue % len);
                 } else {
                     hashTable[hashValue] = true;
                 }
@@ -179,7 +179,7 @@ bool isPairwiseDistinctV1(int** matrix, int N) {
 
 // improved function leveraging hashing to achieve better performance 
 // Takes 
-bool isPairwiseDistinct(int** matrix, int N) {
+bool isPairwiseDistinctV2(int** matrix, int N) {
     double start, end;
     start = omp_get_wtime();
 
