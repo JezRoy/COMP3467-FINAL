@@ -125,7 +125,6 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
 bool isPairwiseDistinct(int** matrix, int N) {
     int len = 1000000;
     bool foundDuplicate = false;
-    int max = -1;
     // Define a hash table array
     bool hashTable[len] = {false};  // Assuming a maximum size for the hash table
 
@@ -133,21 +132,16 @@ bool isPairwiseDistinct(int** matrix, int N) {
     for (int i = 0; i < N; i++) {
         for (int j = i + 1; j < N; j++) {
             int hashValue = matrix[i][j] % len;  // Basic hash function using modulo
-            // To check the highest number in the N x N matrix - debugging thing
-            if (matrix[i][j] > max) {
-                max = matrix[i][j];
-            }
+            
             // Check if the value already exists in the hash table
             if (hashTable[hashValue]) {
                 foundDuplicate = true;
-                printf("%d goes to %d\n", matrix[i][j], hashValue);
             } else {
                 hashTable[hashValue] = true;
             }
             // Set the hash table entry to true indicating presence of the value
         }
     }
-    printf("Largest number was: %d\n", max);
     if (foundDuplicate) {
         printf("Duplicate elements found\n");
         return false; // Return false if duplicates are found
