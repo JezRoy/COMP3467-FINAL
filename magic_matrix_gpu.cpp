@@ -148,7 +148,7 @@ bool isPairwiseDistinct(int** matrix, int N) {
     // Define a hash table array
     bool hashTable[10000] = {false};  // Assuming a maximum size for the hash table
 
-    #pragma omp target map(to: matrix[0:N][0:N]) map(tofrom: hashTable[0:10000]) shared(hashTable) parallel for collapse(2)
+    #pragma omp map(to: matrix[0:N][0:N]) map(tofrom: hashTable[0:10000]) shared(hashTable) parallel for collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = i + 1; j < N; j++) {
             int hashValue = matrix[i][j] % 10000;  // Basic hash function using modulo
