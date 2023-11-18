@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <unordered.set.h>
+#include <unordered_set.h>
 #include <omp.h>
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
