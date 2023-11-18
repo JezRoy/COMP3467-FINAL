@@ -29,9 +29,6 @@ double omp_get_wtime(void);
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {
-    double start;
-    double end;
-    start = omp_get_wtime();
     #pragma omp target map(to:i, j, N) map(tofrom:modifier[0:N][0:N]) distribute parallel for
     {
         for (int i = 0; i < N; i++)
@@ -55,8 +52,6 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             }
         }
     }
-    end = omp_get_wtime();
-    printf("Function 'generateMagicSquare' took %f seconds to complete\n", end - start);
 }
 
 // computes sum of elements in a row
@@ -86,27 +81,17 @@ int sumColumn( int** matrix, int col, int N)
 // checks if all elements in an array are equal
 bool allEqual( int arr[], int N)
 {
-    double start;
-    double end;
-    start = omp_get_wtime();
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
-	{
-            end = omp_get_wtime();
-            printf("Function 'allEqual' took %f seconds to complete\n", end - start);
+	    {
             return false;
         }
     }
-    end = omp_get_wtime();
-    printf("Function 'allEqual' took %f seconds to complete\n", end - start);
     return true;
 }
 
 // Takes 50 seconds
 bool isPairwiseDistinctOLD( int** matrix, int N) {
-    double start;
-    double end;
-    start = omp_get_wtime();
     int duplicatesFound = 0; 
     #pragma omp target teams map(to: matrix[0:N][0:N]) map(tofrom: duplicatesFound) parallel for collapse(2) reduction(+:duplicatesFound)
     {
@@ -126,8 +111,6 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
             }
         }
     }
-    end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
     if (duplicatesFound > 0) {
         printf("found duplicate\n");
         return false;
@@ -140,9 +123,6 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
 // improved function leveraging hashing to achieve better performance 
 // Takes 0.05 - 0.06 seconds
 bool isPairwiseDistinct(int** matrix, int N) {
-    double start;
-    double end;
-    start = omp_get_wtime();
     int len = 400;
     bool foundDuplicate = false;
     int max = -1;
@@ -167,8 +147,7 @@ bool isPairwiseDistinct(int** matrix, int N) {
             // Set the hash table entry to true indicating presence of the value
         }
     }
-    end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
+    printf("Largest number was: ")
     if (foundDuplicate) {
         printf("Duplicate elements found\n");
         return false; // Return false if duplicates are found
@@ -181,8 +160,6 @@ bool isPairwiseDistinct(int** matrix, int N) {
 // improved function leveraging hashing to achieve better performance 
 // Takes 
 bool isPairwiseDistinctV2(int** matrix, int N) {
-    double start, end;
-    start = omp_get_wtime();
 
     // Create an unordered set to store unique elements encountered
     std::unordered_set<int> elements;
@@ -206,10 +183,6 @@ bool isPairwiseDistinctV2(int** matrix, int N) {
             }
         }
     }
-
-    end = omp_get_wtime();
-    printf("Function 'isPairwiseDistinct' took %f seconds to complete\n", end - start);
-
     if (foundDuplicate) {
         printf("Duplicate elements found\n");
         return false; // Return false if duplicates are found
@@ -221,8 +194,6 @@ bool isPairwiseDistinctV2(int** matrix, int N) {
 
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N) {
-    double start, end;
-    start = omp_get_wtime();
     int row_sums[N];
     int col_sums[N];
     int main_diag_sum = 0;
@@ -241,10 +212,6 @@ bool isMagicSquare(int** matrix, int N) {
         anti_diag_sum != row_sums[0] || !isPairwiseDistinct(matrix, N)) {
         isMagic = false;
     }
-
-    end = omp_get_wtime();
-    printf("Function 'isMagicSquare' took %f seconds to complete\n", end - start);
-
     return isMagic;
 }
 
