@@ -123,7 +123,7 @@ bool isPairwiseDistinctOLD( int** matrix, int N) {
 // improved function leveraging hashing to achieve better performance 
 // Takes 0.05 - 0.06 seconds
 bool isPairwiseDistinct(int** matrix, int N) {
-    int len = 400;
+    int len = 200000;
     bool foundDuplicate = false;
     int max = -1;
     // Define a hash table array
