@@ -147,7 +147,7 @@ bool isPairwiseDistinct(int** matrix, int N) {
             // Set the hash table entry to true indicating presence of the value
         }
     }
-    printf("Largest number was: %d", max);
+    printf("Largest number was: %d\n", max);
     if (foundDuplicate) {
         printf("Duplicate elements found\n");
         return false; // Return false if duplicates are found
