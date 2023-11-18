@@ -152,12 +152,13 @@ bool isPairwiseDistinct(int** matrix, int N) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int hashValue = matrix[i][j] % 10000;  // Basic hash function using modulo
-
+            
             #pragma omp critical
             {
                 // Check if the value already exists in the hash table
                 if (hashTable[hashValue]) {
                     foundDuplicate = true;
+                    printf("%d\n", hashValue);
                 } else {
                     hashTable[hashValue] = true;
                 }
