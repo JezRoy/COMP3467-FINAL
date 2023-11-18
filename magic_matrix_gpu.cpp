@@ -142,7 +142,7 @@ bool isPairwiseDistinct(int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
-    int len = 100000;
+    int len = 1000;
     bool foundDuplicate = false;
 
     // Define a hash table array
