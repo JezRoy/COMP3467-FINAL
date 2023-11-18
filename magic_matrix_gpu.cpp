@@ -102,7 +102,7 @@ bool allEqual( int arr[], int N)
 }
 
 // Takes 50 seconds
-bool isPairwiseDistinct( int** matrix, int N) {
+bool isPairwiseDistinctOLD( int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
@@ -138,7 +138,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
 
 // improved function leveraging hashing to achieve better performance 
 // Takes 0.05 - 0.06 seconds
-bool isPairwiseDistinctNEW(int** matrix, int N) {
+bool isPairwiseDistinct(int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
