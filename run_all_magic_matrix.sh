@@ -15,11 +15,11 @@ module load nvc++
 
 # Compile executable
 make clean
-make all
+make mm
 
 # Define paths
 dir="data_sets"
-EXECUTABLE="./mmgpu -np 2"
+EXECUTABLE="./mm"
 
 # Execute for N = 3
 echo "Running magic_matrix for N=3..."
