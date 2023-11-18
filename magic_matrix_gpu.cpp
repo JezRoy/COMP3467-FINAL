@@ -142,16 +142,16 @@ bool isPairwiseDistinct(int** matrix, int N) {
     double start;
     double end;
     start = omp_get_wtime();
-    int len = N * N;
+    int len = 100000;
     bool foundDuplicate = false;
 
     // Define a hash table array
-    bool hashTable[10000] = {false};  // Assuming a maximum size for the hash table
+    bool hashTable[len] = {false};  // Assuming a maximum size for the hash table
 
-    #pragma omp map(to: matrix[0:N][0:N]) map(tofrom: hashTable[0:10000]) shared(hashTable) parallel for collapse(2)
+    #pragma omp map(to: matrix[0:N][0:N]) map(tofrom: hashTable[0:len]) shared(hashTable) parallel for collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = i + 1; j < N; j++) {
-            int hashValue = matrix[i][j] % 10000;  // Basic hash function using modulo
+            int hashValue = matrix[i][j] % len;  // Basic hash function using modulo
             
             {
                 // Check if the value already exists in the hash table
