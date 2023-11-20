@@ -1,6 +1,6 @@
 # FROM: https://github.com/numactl/numactl/archive/master.zip
 
-directory = "/home/"
+directory = "/home2/lwrk28"
 #!/bin/bash
 
 # Download the numactl source code from GitHub
