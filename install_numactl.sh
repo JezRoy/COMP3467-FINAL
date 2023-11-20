@@ -5,6 +5,7 @@
 
 # Download the numactl source code from GitHub
 wget https://github.com/numactl/numactl/archive/master.zip
+sudo apt-get install libnuma-dev
 
 # Unzip the downloaded file
 unzip master.zip
