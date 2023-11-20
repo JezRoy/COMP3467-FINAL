@@ -1,26 +1,25 @@
 # FROM: https://github.com/numactl/numactl/archive/master.zip
 
-directory = "/home2/lwrk28/"
 #!/bin/bash
 
 # Download the numactl source code from GitHub
-wget https://github.com/numactl/numactl/archive/master.zip -d "$directory"
+wget https://github.com/numactl/numactl/archive/master.zip -d "$HOME"
 sudo apt-get install libnuma-dev
 
 # Unzip the downloaded file
-unzip "$directory/master.zip"
+unzip "$HOME/master.zip"
 
 # Enter the numactl directory
-cd "$directory/numactl-master"
+cd "$HOME/numactl-master"
 
 # Configure, build, and install numactl locally in the home directory
 ./autogen.sh
 ./configure
-make install DESTDIR="$directory"
+make install DESTDIR="$HOME"
 
-echo "numactl installed at $directory/numactl-master"
+echo "numactl installed at $HOME/numactl-master"
 
-export PATH="$PATH:$directory/numactl-master/"
+export PATH="$PATH:$HOME/numactl-master/"
 
 echo "numactl has now been added to the path"
 
