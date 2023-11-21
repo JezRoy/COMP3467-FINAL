@@ -151,41 +151,6 @@ bool isPairwiseDistinct(int** matrix, int N) {
     }
 }
 
-// improved function leveraging hashing to achieve better performance 
-// Takes 
-bool isPairwiseDistinctV2(int** matrix, int N) {
-
-    // Create an unordered set to store unique elements encountered
-    std::unordered_set<int> elements;
-
-    bool foundDuplicate = false; // Flag to indicate if a duplicate is found
-
-    #pragma omp target parallel for collapse(2)
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            int currentElement = matrix[i][j];
-
-            // Use hashing to check uniqueness
-            #pragma omp critical
-            {
-                if (elements.find(currentElement) != elements.end()) {
-                    // Set the flag and exit the loop if a duplicate is found
-                    foundDuplicate = true;
-                } else {
-                    elements.insert(currentElement); // Add the element to the set
-                }
-            }
-        }
-    }
-    if (foundDuplicate) {
-        printf("Duplicate elements found\n");
-        return false; // Return false if duplicates are found
-    } else {
-        printf("No duplicate elements found\n");
-        return true; // Return true if no duplicates are found
-    }
-}
-
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N) {
     int row_sums[N];
